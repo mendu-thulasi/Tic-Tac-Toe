@@ -1,13 +1,17 @@
 import java.util.Scanner;
 
 public class TicTacToe {
+    //creating a 3*3 board
     private static char[][] board = new char[3][3];
+    //Variable to track current player
     private static char currentPlayer = 'X';
+    //Variables for storing player names
     private static String playerXName;
     private static String playerOName;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        //Displaying the game instructions to the players
         System.out.println("🎮 Welcome to Tic Tac Toe!");
         System.out.println("Instructions:");
         System.out.println("- Two players take turns.");
@@ -19,18 +23,20 @@ public class TicTacToe {
         playerXName = scanner.nextLine().trim();
         System.out.print("Enter name for Player O: ");
         playerOName = scanner.nextLine().trim();
-
+        //variable to store players opinion of playing one more game
         boolean playAgain;
+        //Game loop
         do {
-            initializeBoard();
+            initializeBoard();//Reseting board
             boolean gameEnded = false;
 
             while (!gameEnded) {
-                printBoard();
+                printBoard();//Showing current board
                 String currentName = (currentPlayer == 'X') ? playerXName : playerOName;
                 System.out.println(currentName + "'s turn, enter your move (row and column):");
 
                 int row = -1, col = -1;
+                //Input validation 
                 while (true) {
                     String input = scanner.nextLine();
                     String[] tokens = input.trim().split("\\s+");
@@ -54,9 +60,9 @@ public class TicTacToe {
                         System.out.println("❌ Invalid move. Cell is occupied or out of bounds. Try again.");
                     }
                 }
-
+                //if movie valid apply it to board
                 board[row][col] = currentPlayer;
-
+                //check if there is a possible win or draw
                 if (checkWin()) {
                     printBoard();
                     System.out.println("🎉 " + currentName + " (" + currentPlayer + ") wins!");
@@ -66,10 +72,11 @@ public class TicTacToe {
                     System.out.println("🤝 It's a draw!");
                     gameEnded = true;
                 } else {
+                    //switching between players
                     currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
                 }
             }
-
+            //Ask to replay
             System.out.println("🔁 Do you want to play again? (yes/no)");
             playAgain = scanner.nextLine().trim().equalsIgnoreCase("yes");
         } while (playAgain);
@@ -77,7 +84,7 @@ public class TicTacToe {
         System.out.println("👋 Thanks for playing!");
         scanner.close();
     }
-
+    //Function to reset the board
     private static void initializeBoard() {
         currentPlayer = 'X';
         for (int i = 0; i < 3; i++) {
@@ -86,7 +93,7 @@ public class TicTacToe {
             }
         }
     }
-
+    //function to display the current board
     private static void printBoard() {
         System.out.println("\nCurrent board:");
         System.out.println("  0   1   2");
@@ -101,11 +108,11 @@ public class TicTacToe {
         }
         System.out.println();
     }
-
+    //checks if the move is within the bounds and the cell is empty
     private static boolean isValidMove(int row, int col) {
         return row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == ' ';
     }
-
+    //check if the current player has won
     private static boolean checkWin() {
         for (int i = 0; i < 3; i++) {
             if ((board[i][0] == currentPlayer &&
@@ -125,7 +132,7 @@ public class TicTacToe {
                 board[1][1] == currentPlayer &&
                 board[2][0] == currentPlayer);
     }
-
+    //check whether board is full and no winner
     private static boolean checkDraw() {
         if (checkWin()) return false;
 
@@ -136,7 +143,7 @@ public class TicTacToe {
         }
         return true;
     }
-
+    //checks if there a possible draw
     private static boolean isStrategicDraw() {
         String[][] lines = {
             { "" + board[0][0], "" + board[0][1], "" + board[0][2] },
@@ -160,4 +167,5 @@ public class TicTacToe {
 
         return true;
     }
+
 }
